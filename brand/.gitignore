@@ -1,0 +1,4 @@
+# Upstream ignores rendered images; the brand tree is source.
+!*.png
+!*.svg
+!*.ico
