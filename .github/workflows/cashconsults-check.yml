@@ -1,0 +1,27 @@
+name: CashDesk check
+
+on:
+  pull_request:
+    branches:
+      - master
+      - cashconsults
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  flake-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - name: Syntax-check brand script
+        run: bash -n brand/apply.sh
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+
+      - name: nix flake check
+        run: nix flake check --print-build-logs
