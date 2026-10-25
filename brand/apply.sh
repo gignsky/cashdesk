@@ -86,6 +86,14 @@ replace_once src/updater.rs \
   "#[allow(unreachable_code)] // CASHCONSULTS: never offer upstream RustDesk builds
 pub fn start_auto_update() {
     return;"
+# Upstream only treats a server the user typed into Settings as self-hosted;
+# ours is compiled in, so the "set up your own server" hint and the public-server
+# limits (FPS/quality caps, relay hints) must not apply.
+replace_once src/common.rs \
+  'pub fn using_public_server() -> bool {' \
+  "#[allow(unreachable_code)] // CASHCONSULTS: the ID server is compiled in, never RustDesk's public one
+pub fn using_public_server() -> bool {
+    return false;"
 
 # ------------------------------------------------------- Windows file metadata
 BASED="Based on RustDesk (AGPL-3.0)."
