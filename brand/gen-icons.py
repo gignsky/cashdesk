@@ -112,11 +112,14 @@ def save_ico(frames: list, dest: pathlib.Path):
     dest.parent.mkdir(parents=True, exist_ok=True)
     # Pillow drops every size larger than the base image, so lead with the largest frame.
     images = sorted((Image.open(p).convert("RGBA") for p in frames), key=lambda im: -im.size[0])
+    # BMP (DIB) frames like upstream's icon.ico: Windows only reliably renders
+    # PNG-compressed frames at 256x256, and a PNG-only .ico shows as a blank icon.
     images[0].save(
         dest,
         format="ICO",
         sizes=[im.size for im in images],
         append_images=images[1:],
+        bitmap_format="bmp",
     )
 
 
